@@ -77,3 +77,19 @@ dotnet add package Aspire.StackExchange.Redis.DistributedCaching
 While the Aspire project is running, you can look at the Redis cache through RedisInsight and see the keys.
 
 Look for the `forecast` key in the Redis cache.
+
+### Add RabbitMQ integration
+
+Aspire Host project
+
+```
+dotnet add package Aspire.Hosting.RabbitMQ
+```
+
+API project
+
+```
+dotnet add package Aspire.RabbitMQ.Client
+```
+
+Add service worker project
