@@ -27,10 +27,10 @@ dotnet run --project PortoTechhub.AppHost
 
 > [!NOTE]
 > Go over the project!
-> Explain the AppHost project and how the orchestration works with the given C# code
-> Explain the OpenTelemetry integration through the service defaults project
-> Explain other aspects of the service defaults project
-> Explain service discovery and how it is tied to environment variables
+> Explain the AppHost project and how the orchestration works with the given C# code  
+> Explain the OpenTelemetry integration through the service defaults project  
+> Explain other aspects of the service defaults project  
+> Explain service discovery and how it is tied to environment variables  
 > Explain other environment variables
 
 ## Add integrations
