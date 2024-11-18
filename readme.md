@@ -26,7 +26,7 @@ dotnet run --project PortoTechhub.AppHost
 ```
 
 > [!NOTE]
-> Go over the project!
+> Go over the project!  
 > Explain the AppHost project and how the orchestration works with the given C# code  
 > Explain the OpenTelemetry integration through the service defaults project  
 > Explain other aspects of the service defaults project  
@@ -42,8 +42,15 @@ Community driven integrations are also available. You can find them in the [Aspi
 
 ### Add Redis cache integration
 
+[Redis Output Cache](https://learn.microsoft.com/en-us/dotnet/aspire/caching/stackexchange-redis-output-caching-integration?tabs=dotnet-cli&pivots=redis)
 Go to the AppHost project directory and run the following command:
 
 ```
 dotnet add package Aspire.Hosting.Redis
+```
+
+In the Web project directory run the following command
+
+```
+
 ```
