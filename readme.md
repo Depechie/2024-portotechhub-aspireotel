@@ -43,14 +43,24 @@ Community driven integrations are also available. You can find them in the [Aspi
 ### Add Redis cache integration
 
 [Redis Output Cache](https://learn.microsoft.com/en-us/dotnet/aspire/caching/stackexchange-redis-output-caching-integration?tabs=dotnet-cli&pivots=redis)
+
+[Redis Output Cache example](https://learn.microsoft.com/en-us/dotnet/aspire/caching/caching-integrations?tabs=dotnet-cli)
+
 Go to the AppHost project directory and run the following command:
 
 ```
 dotnet add package Aspire.Hosting.Redis
 ```
 
+> [!NOTE]
+> Explain the addition of the Redis cache integration in Program.cs of the AppHost project  
+> Explain the WithReference extension method  
+
 In the Web project directory run the following command
 
 ```
-
+dotnet add package Aspire.StackExchange.Redis.OutputCaching
 ```
+
+> [!NOTE]
+> Explain the addition of the Redis cache integration in Program.cs of the Web project  
