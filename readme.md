@@ -64,3 +64,16 @@ dotnet add package Aspire.StackExchange.Redis.OutputCaching
 
 > [!NOTE]
 > Explain the addition of the Redis cache integration in Program.cs of the Web project  
+
+In the API project directory run the following command
+
+```
+dotnet add package Aspire.StackExchange.Redis.DistributedCaching
+```
+
+> [!NOTE]
+> Explain the addition of the Redis cache integration in Program.cs of the Web project  
+
+While the Aspire project is running, you can look at the Redis cache through RedisInsight and see the keys.
+
+Look for the `forecast` key in the Redis cache.
