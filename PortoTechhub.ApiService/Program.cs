@@ -1,7 +1,9 @@
 using System.Diagnostics;
 using System.Text;
 using System.Text.Json;
+using Dapper;
 using Microsoft.Extensions.Caching.Distributed;
+using MySqlConnector;
 using OpenTelemetry;
 using OpenTelemetry.Context.Propagation;
 using RabbitMQ.Client;
@@ -17,6 +19,8 @@ builder.AddRabbitMQClient("messaging", configureConnectionFactory: (connectionFa
 });
 
 builder.AddRedisDistributedCache("cache");
+
+builder.AddMySqlDataSource("Catalog");
 
 // Add services to the container.
 builder.Services.AddProblemDetails();
@@ -83,6 +87,29 @@ app.MapGet("/weatherforecast", async (IDistributedCache cache) =>
 })
 .WithName("GetWeatherForecast");
 
+app.MapGet("/catalog", async (MySqlConnection db) =>
+        {
+            const string sql = """
+                SELECT Id, Name, Description, Price
+                FROM catalog
+                """;
+
+            return await db.QueryAsync<CatalogItem>(sql);
+        });
+
+        app.MapGet("/catalog/{id}", async (int id, MySqlConnection db) =>
+        {
+            const string sql = """
+                SELECT Id, Name, Description, Price
+                FROM catalog
+                WHERE Id = @id
+                """;
+
+            return await db.QueryFirstOrDefaultAsync<CatalogItem>(sql, new { id }) is { } item
+                ? Results.Ok(item)
+                : Results.NotFound();
+        });
+
 void AddActivityToHeader(Activity activity, IBasicProperties props)
 {
     try
@@ -113,3 +140,5 @@ record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
 {
     public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
 }
+
+record CatalogItem(int Id, string Name, string Description, decimal Price);

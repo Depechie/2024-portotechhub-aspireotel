@@ -93,3 +93,23 @@ dotnet add package Aspire.RabbitMQ.Client
 ```
 
 Add service worker project
+
+### Add MySql
+
+Aspire Host project
+
+```
+dotnet add package Aspire.Hosting.MySql
+```
+
+API project
+
+```
+dotnet add package Aspire.MySqlConnector
+```
+
+Show DB data
+
+```
+https://localhost:7540/catalog
+```
