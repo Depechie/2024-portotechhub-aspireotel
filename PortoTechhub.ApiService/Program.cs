@@ -49,6 +49,14 @@ string[] summaries = ["Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "
 
 app.MapGet("/weatherforecast", async (IDistributedCache cache) =>
 {
+    using var activity = activitySource.StartActivity($"Orders publish", ActivityKind.Producer);
+    AddActivityToHeader(activity, properties);
+
+    messageChannel.BasicPublish(exchange: string.Empty,
+                                routingKey: "orders",
+                                basicProperties: properties,
+                                body: body);
+
     var cachedForecast = await cache.GetAsync("forecast");
 
     if (cachedForecast is null)
@@ -67,14 +75,6 @@ app.MapGet("/weatherforecast", async (IDistributedCache cache) =>
         {
             AbsoluteExpiration = DateTime.Now.AddSeconds(10)
         });
-
-        using var activity = activitySource.StartActivity($"Orders publish", ActivityKind.Producer);
-        AddActivityToHeader(activity, properties);
-
-        messageChannel.BasicPublish(exchange: string.Empty,
-                                    routingKey: "orders",
-                                    basicProperties: properties,
-                                    body: body);
 
         return forecast;
     }
@@ -113,3 +113,5 @@ record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
 {
     public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
 }
+
+record CatalogItem(int Id, string Name, string Description, decimal Price);

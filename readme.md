@@ -72,7 +72,7 @@ dotnet add package Aspire.StackExchange.Redis.DistributedCaching
 ```
 
 > [!NOTE]
-> Explain the addition of the Redis cache integration in Program.cs of the Web project  
+> Explain the addition of the Redis cache integration in Program.cs of the API project  
 
 While the Aspire project is running, you can look at the Redis cache through RedisInsight and see the keys.
 
@@ -93,3 +93,23 @@ dotnet add package Aspire.RabbitMQ.Client
 ```
 
 Add service worker project
+
+### Add MySql
+
+Aspire Host project
+
+```
+dotnet add package Aspire.Hosting.MySql
+```
+
+API project
+
+```
+dotnet add package Aspire.MySqlConnector
+```
+
+Show DB data
+
+```
+https://localhost:7540/catalog
+```
