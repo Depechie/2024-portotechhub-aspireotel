@@ -1,7 +1,9 @@
 using System.Diagnostics;
 using System.Text;
 using System.Text.Json;
+using Dapper;
 using Microsoft.Extensions.Caching.Distributed;
+using Npgsql;
 using OpenTelemetry;
 using OpenTelemetry.Context.Propagation;
 using RabbitMQ.Client;
@@ -10,6 +12,8 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add service defaults & Aspire client integrations.
 builder.AddServiceDefaults();
+
+builder.AddNpgsqlDataSource("Todos");
 
 builder.AddRabbitMQClient("messaging", configureConnectionFactory: (connectionFactory) =>
 {
@@ -83,6 +87,29 @@ app.MapGet("/weatherforecast", async (IDistributedCache cache) =>
 })
 .WithName("GetWeatherForecast");
 
+app.MapGet("/todos", async (NpgsqlConnection db) =>
+{
+    const string sql = """
+        SELECT Id, Title, IsComplete
+        FROM Todos
+        """;
+
+    return await db.QueryAsync<Todo>(sql);
+});
+
+app.MapGet("/todos/{id}", async (int id, NpgsqlConnection db) =>
+{
+    const string sql = """
+        SELECT Id, Title, IsComplete
+        FROM Todos
+        WHERE Id = @id
+        """;
+
+    return await db.QueryFirstOrDefaultAsync<Todo>(sql, new { id }) is { } todo
+        ? Results.Ok(todo)
+        : Results.NotFound();
+});
+
 void AddActivityToHeader(Activity activity, IBasicProperties props)
 {
     try
@@ -114,4 +141,4 @@ record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
     public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
 }
 
-record CatalogItem(int Id, string Name, string Description, decimal Price);
+record Todo(int Id, string Title, bool IsComplete);
