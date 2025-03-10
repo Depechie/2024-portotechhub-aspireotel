@@ -7,6 +7,7 @@ var messaging = builder.AddRabbitMQ("messaging")
 var cache = builder.AddRedis("cache")
     .WithRedisInsight();
 
+//https://github.com/dotnet/aspire/issues/6671
 var todosDbName = "Todos";
 var postgres = builder.AddPostgres("postgres")
     .WithEnvironment("POSTGRES_DB", todosDbName)
