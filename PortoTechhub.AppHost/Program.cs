@@ -1,3 +1,5 @@
+using Azure.Provisioning.PostgreSql;
+
 var builder = DistributedApplication.CreateBuilder(args);
 
 var messaging = builder.AddRabbitMQ("messaging")
@@ -9,11 +11,15 @@ var cache = builder.AddRedis("cache")
 
 //https://github.com/dotnet/aspire/issues/6671
 var todosDbName = "Todos";
-var postgres = builder.AddPostgres("postgres")
-    .WithEnvironment("POSTGRES_DB", todosDbName)
-    .WithBindMount("../config/postgres", "/docker-entrypoint-initdb.d")
-    .WithDataVolume()
-    .WithLifetime(ContainerLifetime.Persistent);
+
+var username = builder.AddParameter("username", "user", secret: true);
+var password = builder.AddParameter("password", "password", secret: true);
+
+// var postgres = builder.AddPostgres("postgres")
+var postgres = builder.AddAzurePostgresFlexibleServer("postgres")
+    .WithPasswordAuthentication(username, password)
+    .RunAsContainer();
+
 var todosDb = postgres.AddDatabase(todosDbName);
 
 var apiService = builder.AddProject<Projects.PortoTechhub_ApiService>("apiservice")

@@ -6,6 +6,7 @@ using Microsoft.Extensions.Caching.Distributed;
 using Npgsql;
 using OpenTelemetry;
 using OpenTelemetry.Context.Propagation;
+using PortoTechhub.ApiService;
 using RabbitMQ.Client;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -29,6 +30,13 @@ builder.Services.AddProblemDetails();
 builder.Services.AddOpenApi();
 
 var app = builder.Build();
+
+// Initialize database
+using (var scope = app.Services.CreateScope())
+{
+    var connectionString = scope.ServiceProvider.GetRequiredService<NpgsqlConnection>().ConnectionString;
+    DatabaseInitializer.Initialize(connectionString, "user", "password");
+}
 
 // Configure the HTTP request pipeline.
 app.UseExceptionHandler();
